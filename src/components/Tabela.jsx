@@ -10,21 +10,23 @@ import TableRow from "@mui/material/TableRow";
 import { Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
+import { mascaraCpf } from "../utils/mascaraCpf";
 
 const columns = [
   {
     id: "nome",
     label: "Nome",
-    minWidth: 100,
+    minWidth: 90,
     align: "left",
   },
   {
     id: "cpf",
     label: "CPF",
-    minWidth: 70,
+    minWidth: 110,
     align: "left",
-    //cpf mask
-    //format: (value) => value.toLocaleString("en-US"),
+    format: (value) => {
+      return mascaraCpf(value);
+    },
   },
   {
     id: "cartaoSUS",
@@ -41,13 +43,13 @@ const columns = [
   {
     id: "data",
     label: "Data",
-    minWidth: 100,
+    minWidth: 120,
     align: "left",
   },
   {
     id: "urgencia",
     label: "Urgência",
-    minWidth: 100,
+    minWidth: 50,
     align: "left",
   },
   {
@@ -87,7 +89,9 @@ export function Tabela({ agendamentos }) {
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  style={{
+                    minWidth: column.minWidth,
+                  }}
                 >
                   {column.label}
                 </TableCell>
@@ -105,9 +109,7 @@ export function Tabela({ agendamentos }) {
                       const value = agendamento[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
+                          {column.format ? column.format(value) : value}
                         </TableCell>
                       );
                     })}

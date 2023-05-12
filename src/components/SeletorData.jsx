@@ -4,7 +4,7 @@ import { Typography, Box } from "@mui/material";
 import { DisponibilidadeAgendamento } from "../utils/disponibilidadeAgendamento";
 
 export function SeletorData({ selecionar, valor }) {
-  console.log(valor);
+  const largura = window.screen.width;
   return (
     <div>
       <Typography mt={1}>Selecione o dia desejado</Typography>
@@ -20,9 +20,11 @@ export function SeletorData({ selecionar, valor }) {
           <Box sx={{ width: 1 / 4 }}>
             <Typography>Data</Typography>
           </Box>
-          <Box sx={{ width: 1 / 4 }}>
-            <Typography>Dia</Typography>
-          </Box>
+          {largura > 700 && (
+            <Box sx={{ width: 1 / 4 }}>
+              <Typography>Dia</Typography>
+            </Box>
+          )}
           <Box sx={{ width: 1 / 3 }}>
             <Typography ml={2}>Horas</Typography>
           </Box>
@@ -38,12 +40,15 @@ export function SeletorData({ selecionar, valor }) {
             key={i}
           >
             <Box
-              sx={{
-                width: 1 / 2,
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-              }}
+              sx={[
+                largura > 700
+                  ? { flexDirection: "row" }
+                  : { flexDirection: "column" },
+                {
+                  width: 1 / 2,
+                  display: "flex",
+                },
+              ]}
             >
               <Box
                 sx={{
@@ -72,26 +77,29 @@ export function SeletorData({ selecionar, valor }) {
             >
               {dia.horas.map((hora, index) => (
                 <Box
-                  sx={[
-                    `${dia.dia} : ${hora}` == valor
-                      ? {
-                          border: 2,
-                          borderColor: "rgb(75,78,252)!important",
-                          padding: "3px",
-                          width: "100%",
-                          margin: "2px",
-                          borderRadius: "5px",
-                        }
-                      : {
-                          padding: "3px",
-                          width: "100%",
-                          margin: "2px",
-                        },
-                  ]}
+                  sx={{
+                    padding: "3px",
+                    width: "100%",
+                    margin: "2px",
+                  }}
                   key={index}
                 >
                   <Button
-                    sx={
+                    sx={[
+                      { padding: "5px" },
+                      `${dia.dia} : ${hora}` == valor
+                        ? {
+                            border: 3,
+                            borderColor: "rgb(0, 10, 207)!important",
+                            boxShadow: 2,
+                            width: "100%",
+                            margin: "2px",
+                            borderRadius: "5px",
+                          }
+                        : {
+                            width: "100%",
+                            margin: "2px",
+                          },
                       DisponibilidadeAgendamento(`${dia.dia} : ${hora}`)
                         ? {
                             bgcolor: "rgb(111, 111, 120)!important",
@@ -99,8 +107,8 @@ export function SeletorData({ selecionar, valor }) {
                           }
                         : {
                             bgcolor: "rgb(75,78,252)!important",
-                          }
-                    }
+                          },
+                    ]}
                     disabled={DisponibilidadeAgendamento(
                       `${dia.dia} : ${hora}`
                     )}

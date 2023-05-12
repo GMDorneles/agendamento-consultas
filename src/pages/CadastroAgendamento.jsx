@@ -1,3 +1,4 @@
+import { useState } from "react";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
@@ -5,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { InputTexto } from "../components/InputComponente";
 import { Select } from "../components/Select";
-import { Calendario } from "../components/calendario";
+import { SeletorData } from "../components/SeletorData";
 import { criarAgendamento, editarAgendamento } from "../store/Agendamentos";
 import { validarCpf } from "../utils/validarCpf";
 
@@ -13,13 +14,19 @@ export function CadastroAgendamento() {
   const dispatch = useDispatch();
   const { handleSubmit, control } = useForm();
   const { state } = useLocation();
+  const [dataHora, setDataHora] = useState("");
 
   const onSubmit = (data) => {
     if (state?.data) {
-      const agendamentosData = { id: state?.data?.id, ...data };
-      dispatch(editarAgendamento(agendamentosData));
+      const agendamentosDataId = {
+        id: state?.data?.id,
+        data: dataHora,
+        ...data,
+      };
+      dispatch(editarAgendamento(agendamentosDataId));
     } else {
-      dispatch(criarAgendamento(data));
+      const agendamentoData = { data: dataHora, ...data };
+      dispatch(criarAgendamento(agendamentoData));
     }
   };
 
@@ -73,6 +80,7 @@ export function CadastroAgendamento() {
           </Box>
         </Box>
         <form onSubmit={handleSubmit(onSubmit)}>
+          <SeletorData selecionar={setDataHora} valor={dataHora} />
           <Grid container spacing={2} mt={3} mb={3}>
             <Grid item xs={4}>
               <Box
@@ -242,26 +250,6 @@ export function CadastroAgendamento() {
                 />
               </Box>
             </Grid>
-            <Grid item xs={3}>
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <Controller
-                  name="data"
-                  control={control}
-                  defaultValue={state?.data?.data}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <Calendario
-                      value={value}
-                      onChange={onChange}
-                      error={error}
-                    />
-                  )}
-                  rules={{ required: "Campo obrigatório" }}
-                />
-              </Box>
-            </Grid>
           </Grid>
           <Box
             sx={{
@@ -274,7 +262,7 @@ export function CadastroAgendamento() {
             <Button
               type="submit"
               sx={{
-                bgcolor: "rgb(75,78,252)",
+                bgcolor: "rgb(75,78,252)!important",
                 borderRadius: "10px",
                 maxHeight: "80px",
               }}

@@ -1,8 +1,8 @@
+import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Tabela } from "../components/Tabela";
-import { useState } from "react";
-import { Box, Button, Container, Typography, TextField } from "@mui/material";
-import { useSelector } from "react-redux";
 
 export function Home() {
   const [busca, setBusca] = useState("");

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import EditIcon from "@mui/icons-material/Edit";
+import { Button } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,8 +8,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { Button } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { mascaraCpf } from "../utils/mascaraCpf";
 
@@ -68,14 +68,15 @@ const columns = [
 
 export function Tabela({ agendamentos }) {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [linhasPag, setlinhasPag] = useState(5);
 
-  const handleChangePage = (event, newPage) => {
+  const mudarPag = (event, newPage) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
+  //quantas linhas serão exibidas
+  const definirLinhasPag = (event) => {
+    setlinhasPag(+event.target.value);
     setPage(0);
   };
 
@@ -101,7 +102,7 @@ export function Tabela({ agendamentos }) {
           </TableHead>
           <TableBody>
             {agendamentos
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .slice(page * linhasPag, page * linhasPag + linhasPag)
               .map((agendamento, i) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={i}>
@@ -132,13 +133,13 @@ export function Tabela({ agendamentos }) {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 15]}
+        linhasPagOptions={[5, 10, 15]}
         component="div"
         count={agendamentos?.length}
-        rowsPerPage={rowsPerPage}
+        linhasPag={linhasPag}
         page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
+        onPageChange={mudarPag}
+        onlinhasPagChange={definirLinhasPag}
       />
     </Paper>
   );

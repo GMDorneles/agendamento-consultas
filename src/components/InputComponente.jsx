@@ -11,6 +11,7 @@ const BootstrapInput = styled(Input)(() => ({
   },
 }));
 
+//Input reutilizável
 export function InputTexto({
   nome,
   onChange,
@@ -20,6 +21,7 @@ export function InputTexto({
   maxCaracteres,
   validacao,
 }) {
+  //Caso seja necessário validar algum dado como cpf a função é chamada aqui
   const errosValidacao =
     value?.length >= maxCaracteres && validacao != undefined
       ? validacao(value)

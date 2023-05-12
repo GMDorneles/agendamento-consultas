@@ -1,8 +1,8 @@
-import { Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { HorasDisponiveis } from "../constants/HorasDisponiveis";
-import { Typography, Box } from "@mui/material";
 import { DisponibilidadeAgendamento } from "../utils/disponibilidadeAgendamento";
 
+//Mostra datas liberadas para agendamento
 export function SeletorData({ selecionar, valor }) {
   const largura = window.screen.width;
   return (
@@ -109,6 +109,7 @@ export function SeletorData({ selecionar, valor }) {
                             bgcolor: "rgb(75,78,252)!important",
                           },
                     ]}
+                    //Verifica de a data está ocupada
                     disabled={DisponibilidadeAgendamento(
                       `${dia.dia} : ${hora}`
                     )}

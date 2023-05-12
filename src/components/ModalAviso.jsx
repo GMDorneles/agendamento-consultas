@@ -13,7 +13,9 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+//Modal reutilizável para avisos
 export function ModalAviso({ estadoModal, fechar, aviso }) {
+  //tamanho da tela
   const largura = window.screen.width;
 
   return (

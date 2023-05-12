@@ -1,21 +1,35 @@
-import { useState } from "react";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { InputTexto } from "../components/InputComponente";
 import { Select } from "../components/Select";
 import { SeletorData } from "../components/SeletorData";
+import { ModalAviso } from "../components/modalAviso";
 import { criarAgendamento, editarAgendamento } from "../store/Agendamentos";
 import { validarCpf } from "../utils/validarCpf";
 
 export function CadastroAgendamento() {
+  //Tamanho da página
+  const largura = window.screen.width;
   const dispatch = useDispatch();
   const { handleSubmit, control } = useForm();
+  const history = useNavigate();
   const { state } = useLocation();
   const [dataHora, setDataHora] = useState("");
+  const [estadoModal, setEstadoModal] = useState(false);
 
+  const abrirModal = () => setEstadoModal(true);
+
+  //fecha modal e volta para a home
+  const fecharModal = () => {
+    setEstadoModal(false);
+    history("/");
+  };
+
+  //salvar dados
   const onSubmit = (data) => {
     if (state?.data) {
       const agendamentosDataId = {
@@ -28,21 +42,25 @@ export function CadastroAgendamento() {
       const agendamentoData = { data: dataHora, ...data };
       dispatch(criarAgendamento(agendamentoData));
     }
+    abrirModal(true);
   };
 
   return (
-    <Container
-      maxWidth="lg"
-      sx={{ justifyContent: "center", display: "flex", padding: "15px" }}
-    >
+    <Container maxWidth="lg" sx={{ justifyContent: "center", display: "flex" }}>
       <Box
-        sx={{
-          border: 1,
-          borderRadius: "16px",
-          borderColor: "rgb(223 219 219)",
-          padding: "45px",
-          width: "100%",
-        }}
+        sx={[
+          {
+            width: "100%",
+          },
+          largura > 700
+            ? {
+                padding: "45px",
+                border: 1,
+                borderRadius: "16px",
+                borderColor: "rgb(223 219 219)",
+              }
+            : { padding: "2px" },
+        ]}
         m={6}
       >
         <Typography
@@ -277,6 +295,11 @@ export function CadastroAgendamento() {
             </Button>
           </Box>
         </form>
+        <ModalAviso
+          estadoModal={estadoModal}
+          fechar={fecharModal}
+          aviso={"Dado salvo com sucesso!"}
+        />
       </Box>
     </Container>
   );

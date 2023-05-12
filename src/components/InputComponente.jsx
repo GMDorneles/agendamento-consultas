@@ -21,7 +21,7 @@ export function InputTexto({
   validacao,
 }) {
   const errosValidacao =
-    value.length >= maxCaracteres && validacao != undefined
+    value?.length >= maxCaracteres && validacao != undefined
       ? validacao(value)
       : true;
 

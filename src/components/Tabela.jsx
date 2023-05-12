@@ -1,5 +1,4 @@
-import EditIcon from "@mui/icons-material/Edit";
-import { Button } from "@mui/material";
+import { useState } from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,7 +7,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { useState } from "react";
+import { Button } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
 import { mascaraCpf } from "../utils/mascaraCpf";
 
@@ -67,17 +67,17 @@ const columns = [
 ];
 
 export function Tabela({ agendamentos }) {
-  const [page, setPage] = useState(0);
-  const [linhasPag, setlinhasPag] = useState(5);
+  const [pag, setPag] = useState(0);
+  const [linhasPag, setLinhasPag] = useState(5);
 
-  const mudarPag = (event, newPage) => {
-    setPage(newPage);
+  const mudarPag = (event, novaPag) => {
+    setPag(novaPag);
   };
 
-  //quantas linhas serão exibidas
-  const definirLinhasPag = (event) => {
-    setlinhasPag(+event.target.value);
-    setPage(0);
+  //quantas linhas serão exibidas na tabela
+  const mudarLinhasPag = (event) => {
+    setLinhasPag(+event.target.value);
+    setPag(0);
   };
 
   return (
@@ -102,7 +102,7 @@ export function Tabela({ agendamentos }) {
           </TableHead>
           <TableBody>
             {agendamentos
-              .slice(page * linhasPag, page * linhasPag + linhasPag)
+              .slice(pag * linhasPag, pag * linhasPag + linhasPag)
               .map((agendamento, i) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={i}>
@@ -133,13 +133,13 @@ export function Tabela({ agendamentos }) {
         </Table>
       </TableContainer>
       <TablePagination
-        linhasPagOptions={[5, 10, 15]}
+        rowsPerPageOptions={[5, 10, 15]}
         component="div"
         count={agendamentos?.length}
-        linhasPag={linhasPag}
-        page={page}
+        rowsPerPage={linhasPag}
+        page={pag}
         onPageChange={mudarPag}
-        onlinhasPagChange={definirLinhasPag}
+        onRowsPerPageChange={mudarLinhasPag}
       />
     </Paper>
   );

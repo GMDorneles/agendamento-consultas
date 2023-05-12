@@ -1,5 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import { Typography } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -17,9 +18,7 @@ export function Calendario({ onChange, value, error }) {
   const classes = useStyles();
 
   const minDateTime = new Date();
-  minDateTime.setHours(17);
-  const maxDateTime = new Date();
-  maxDateTime.setHours(20);
+  minDateTime.setHours(1);
 
   return (
     <form className={classes.container} noValidate>
@@ -38,9 +37,11 @@ export function Calendario({ onChange, value, error }) {
         }}
         inputProps={{
           min: minDateTime.toISOString().slice(0, 16),
-          max: maxDateTime.toISOString().slice(0, 16),
         }}
       />
+      <Typography sx={{ color: "#d32f2f", fontSize: "0.75rem" }}>
+        {error ? error.message : null}
+      </Typography>
     </form>
   );
 }

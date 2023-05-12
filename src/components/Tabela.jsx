@@ -7,6 +7,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import { Button } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import { Link } from "react-router-dom";
 
 const columns = [
   {
@@ -108,7 +111,18 @@ export function Tabela({ agendamentos }) {
                         </TableCell>
                       );
                     })}
-                    <TableCell>Edit icon</TableCell>
+                    <TableCell align={"right"}>
+                      <Link
+                        to="/form"
+                        state={{
+                          data: agendamento,
+                        }}
+                      >
+                        <Button>
+                          <EditIcon sx={{ color: "black", fontSize: 20 }} />
+                        </Button>
+                      </Link>
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -118,7 +132,7 @@ export function Tabela({ agendamentos }) {
       <TablePagination
         rowsPerPageOptions={[5, 10, 15]}
         component="div"
-        count={agendamentos.length}
+        count={agendamentos?.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

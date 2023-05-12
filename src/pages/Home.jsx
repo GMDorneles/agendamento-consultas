@@ -11,7 +11,7 @@ export function Home() {
 
   //filtrando conforme o input de busca
   const filterAgendamentos =
-    busca.length > 0
+    busca?.length > 0
       ? agendamentoLista.filter(
           (agendamento) =>
             agendamento.nome.toUpperCase().includes(busca.toUpperCase()) ||
@@ -24,7 +24,6 @@ export function Home() {
       maxWidth="lg"
       sx={{ justifyContent: "center", display: "flex", padding: "15px" }}
     >
-      {console.log(agendamentoLista)}
       <Box
         sx={{
           border: 1,
@@ -52,7 +51,7 @@ export function Home() {
           <Typography sx={{ color: "gray", fontSize: 15 }} mt={1} mb={1}>
             Listagem
           </Typography>
-          <Link to={"/cadastro"}>
+          <Link to={"/form"}>
             <Button
               sx={{
                 bgcolor: "rgb(75,78,252)",

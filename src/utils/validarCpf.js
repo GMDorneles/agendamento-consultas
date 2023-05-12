@@ -1,8 +1,8 @@
 export function validarCpf(value) {
-    let cpf = value.replace(/[^\d]+/g, '');
+    let cpf = value?.replace(/[^\d]+/g, '');
     if (cpf === '') return false;
     // Elimina CPFs invalidos conhecidos	
-    if (cpf.length !== 11 ||
+    if (cpf?.length !== 11 ||
         cpf === "00000000000" ||
         cpf === "11111111111" ||
         cpf === "22222222222" ||

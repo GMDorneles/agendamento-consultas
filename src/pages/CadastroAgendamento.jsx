@@ -1,20 +1,26 @@
-import { Box, Container, Typography, Grid, Button } from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
-import Input from "@mui/material/Input";
-import { Calendario } from "../components/calendario";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import { Controller, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { criarAgendamento } from "../store/Agendamentos";
-
+import { Link, useLocation } from "react-router-dom";
+import { InputTexto } from "../components/InputComponente";
 import { Select } from "../components/Select";
+import { Calendario } from "../components/calendario";
+import { criarAgendamento, editarAgendamento } from "../store/Agendamentos";
+import { validarCpf } from "../utils/validarCpf";
 
 export function CadastroAgendamento() {
   const dispatch = useDispatch();
   const { handleSubmit, control } = useForm();
+  const { state } = useLocation();
 
   const onSubmit = (data) => {
-    console.log(data);
-
-    dispatch(criarAgendamento(data));
+    if (state?.data) {
+      const agendamentosData = { id: state?.data?.id, ...data };
+      dispatch(editarAgendamento(agendamentosData));
+    } else {
+      dispatch(criarAgendamento(data));
+    }
   };
 
   return (
@@ -39,16 +45,32 @@ export function CadastroAgendamento() {
           Agendamentos
         </Typography>
 
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            borderRadius: "16px",
-          }}
-        >
-          <Typography sx={{ color: "gray", fontSize: 15 }} mt={1} mb={1}>
-            Cadastro
-          </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignContent: "center",
+            }}
+          >
+            <Link to={"/"}>
+              <Typography sx={{ color: "gray", fontSize: 15 }} mb={1}>
+                Listagem
+              </Typography>
+            </Link>
+            <ArrowForwardIosIcon
+              sx={{ color: "gray", fontSize: 16, marginTop: "3px" }}
+            />
+            {state?.data ? (
+              <Typography sx={{ color: "gray", fontSize: 15 }} mb={1}>
+                Edição
+              </Typography>
+            ) : (
+              <Typography sx={{ color: "gray", fontSize: 15 }} mb={1}>
+                Cadastro
+              </Typography>
+            )}
+          </Box>
         </Box>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2} mt={3} mb={3}>
@@ -63,24 +85,17 @@ export function CadastroAgendamento() {
                 <Controller
                   name="nome"
                   control={control}
-                  defaultValue=""
+                  defaultValue={state?.data?.nome}
                   render={({
                     field: { onChange, value },
                     fieldState: { error },
                   }) => (
-                    <Input
-                      sx={{
-                        width: "100%",
-                        border: 1,
-                        borderRadius: "4px",
-                        borderColor: "rgb(223 219 219)",
-                        padding: "6px",
-                      }}
-                      placeholder="*Nome"
-                      size="small"
+                    <InputTexto
+                      nome="*Nome"
                       value={value}
                       onChange={onChange}
-                      error={!!error}
+                      error={error}
+                      tipo={"text"}
                     />
                   )}
                   rules={{ required: "Campo obrigatório" }}
@@ -92,26 +107,18 @@ export function CadastroAgendamento() {
                 <Controller
                   name="cpf"
                   control={control}
-                  defaultValue=""
+                  defaultValue={state?.data?.cpf}
                   render={({
                     field: { onChange, value },
                     fieldState: { error },
                   }) => (
-                    <Input
-                      sx={{
-                        width: "100%",
-                        border: 1,
-                        borderRadius: "4px",
-                        borderColor: "rgb(223 219 219)",
-                        padding: "6px",
-                      }}
-                      type="number"
-                      placeholder="*CPF"
-                      variant="outlined"
-                      size="small"
-                      value={value}
+                    <InputTexto
+                      nome="*CPF"
+                      value={value?.replace(/\D/g, "")}
                       onChange={onChange}
-                      error={!!error}
+                      error={error}
+                      maxCaracteres={11}
+                      validacao={validarCpf}
                     />
                   )}
                   rules={{ required: "Campo obrigatório" }}
@@ -123,25 +130,17 @@ export function CadastroAgendamento() {
                 <Controller
                   name="cartaoSUS"
                   control={control}
-                  defaultValue=""
+                  defaultValue={state?.data?.cartaoSUS}
                   render={({
                     field: { onChange, value },
                     fieldState: { error },
                   }) => (
-                    <Input
-                      sx={{
-                        width: "100%",
-                        border: 1,
-                        borderRadius: "4px",
-                        borderColor: "rgb(223 219 219)",
-                        padding: "6px",
-                      }}
-                      placeholder="*Cartão do SUS"
-                      variant="outlined"
-                      size="small"
-                      value={value}
+                    <InputTexto
+                      nome="*Cartão do SUS"
+                      value={value?.replace(/\D/g, "")}
                       onChange={onChange}
-                      error={!!error}
+                      error={error}
+                      maxCaracteres={15}
                     />
                   )}
                   rules={{ required: "Campo obrigatório" }}
@@ -153,25 +152,17 @@ export function CadastroAgendamento() {
                 <Controller
                   name="motivoAtendimento"
                   control={control}
-                  defaultValue=""
+                  defaultValue={state?.data?.motivoAtendimento}
                   render={({
                     field: { onChange, value },
                     fieldState: { error },
                   }) => (
-                    <Input
-                      sx={{
-                        width: "100%",
-                        border: 1,
-                        borderRadius: "4px",
-                        borderColor: "rgb(223 219 219)",
-                        padding: "6px",
-                      }}
-                      placeholder="*Motivo do atendimento"
-                      variant="outlined"
-                      size="small"
+                    <InputTexto
+                      nome="*Motivo do atendimento"
                       value={value}
                       onChange={onChange}
-                      error={!!error}
+                      error={error}
+                      tipo={"text"}
                     />
                   )}
                   rules={{ required: "Campo obrigatório" }}
@@ -182,27 +173,19 @@ export function CadastroAgendamento() {
             <Grid item xs={5}>
               <Box sx={{ display: "flex", flexDirection: "column" }}>
                 <Controller
+                  defaultValue={state?.data?.medicoAtendente}
                   name="medicoAtendente"
                   control={control}
-                  defaultValue=""
                   render={({
                     field: { onChange, value },
                     fieldState: { error },
                   }) => (
-                    <Input
-                      sx={{
-                        width: "100%",
-                        border: 1,
-                        borderRadius: "4px",
-                        borderColor: "rgb(223 219 219)",
-                        padding: "6px",
-                      }}
-                      placeholder="*Médico atendente"
-                      variant="outlined"
-                      size="small"
+                    <InputTexto
+                      nome="*Médico atendente"
                       value={value}
                       onChange={onChange}
-                      error={!!error}
+                      error={error}
+                      tipo={"text"}
                     />
                   )}
                   rules={{ required: "Campo obrigatório" }}
@@ -214,25 +197,17 @@ export function CadastroAgendamento() {
                 <Controller
                   name="profissionalAgendamento"
                   control={control}
-                  defaultValue=""
+                  defaultValue={state?.data?.profissionalAgendamento}
                   render={({
                     field: { onChange, value },
                     fieldState: { error },
                   }) => (
-                    <Input
-                      sx={{
-                        width: "100%",
-                        border: 1,
-                        borderRadius: "4px",
-                        borderColor: "rgb(223 219 219)",
-                        padding: "6px",
-                      }}
-                      placeholder="*Profissional do Agendamento"
-                      variant="outlined"
-                      size="small"
+                    <InputTexto
+                      nome="*Profissional do Agendamento"
                       value={value}
                       onChange={onChange}
-                      error={!!error}
+                      error={error}
+                      tipo={"text"}
                     />
                   )}
                   rules={{ required: "Campo obrigatório" }}
@@ -244,7 +219,7 @@ export function CadastroAgendamento() {
                 <Controller
                   name="urgencia"
                   control={control}
-                  defaultValue=""
+                  defaultValue={state?.data?.urgencia}
                   render={({
                     field: { onChange, value },
                     fieldState: { error },
@@ -272,7 +247,7 @@ export function CadastroAgendamento() {
                 <Controller
                   name="data"
                   control={control}
-                  defaultValue=""
+                  defaultValue={state?.data?.data}
                   render={({
                     field: { onChange, value },
                     fieldState: { error },
@@ -280,7 +255,7 @@ export function CadastroAgendamento() {
                     <Calendario
                       value={value}
                       onChange={onChange}
-                      error={!!error}
+                      error={error}
                     />
                   )}
                   rules={{ required: "Campo obrigatório" }}

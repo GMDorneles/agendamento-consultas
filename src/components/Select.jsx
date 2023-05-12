@@ -49,7 +49,7 @@ export function Select({ nome, options, onChange, value, error }) {
       >
         {options.map((op, i) => {
           return (
-            <option key={i} value={i != 0 ? i : " "}>
+            <option key={i} value={i != 0 ? op : " "}>
               {op}
             </option>
           );
